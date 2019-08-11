@@ -1,17 +1,24 @@
 package br.com.amandacampos.starwarsplanets.resources;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import br.com.amandacampos.starwarsplanets.domain.Planet;
+import br.com.amandacampos.starwarsplanets.service.PlanetService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/planets")
 public class PlanetResource {
 
+    @Autowired
+    private PlanetService planetService;
 
     /**
      * Add a new planet to the base.
      */
-    public void addPlanet() {}
+    @PostMapping(path = "/add")
+    public void addPlanet(@RequestBody Planet planet) {
+        planetService.savePlanet(planet);
+    }
 
 
     /**
