@@ -3,57 +3,61 @@ package br.com.amandacampos.starwarsplanets.resources;
 import br.com.amandacampos.starwarsplanets.models.Planet;
 import br.com.amandacampos.starwarsplanets.services.PlanetService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/planets/v1")
+@RequestMapping("/planets")
 public class PlanetResource {
-    // todo: retornar ResponseEntity nos metodos
 
     @Autowired
     private PlanetService planetService;
 
-
     /**
-     * Add a new planet to the base.
+     * Add a new planet to the database.
+     * @param planet Planet
+     * @return ResponseEntity<Planet>
      */
-    @PostMapping(path = "/add")
-    public Planet insert(@Valid @RequestBody Planet planet) {
+    @PostMapping
+    public ResponseEntity<Planet> insert(@Valid @RequestBody Planet planet) {
         return planetService.save(planet);
     }
 
-
     /**
-     * Lists all planets registered in the base.
+     * Lists all planets registered in the database.
      */
     public void listPlanets() {}
 
-
     /**
-     * Search for a planet by name on base.
+     * Search for a planet by name on database.
+     * @param name String
+     * @return Planet
      */
-    @GetMapping(path = "/searchbyname/{name}")
-    public Planet findPlanetByName(@PathVariable String name) {
+    @GetMapping()
+    public Planet findPlanetByName(@Param("name") String name) {
         return planetService.findByName(name);
     }
 
-
     /**
-     * Search for a planet by id on base.
+     * Search for a planet by id on database.
+     * @param id Long
+     * @return Planet
      */
-    @GetMapping(path = "/search/{id}")
-    public Planet findPlanetById(@PathVariable Long id) {
+    @GetMapping(path = "/{id}")
+    public ResponseEntity<Planet> findPlanetById(@PathVariable Long id) {
         return planetService.findById(id);
     }
 
-
     /**
-     * Excludes a planet from the base.
+     * Excludes a planet from the database.
+     * @param id Long
+     * @return ResponseEntity
      */
     @DeleteMapping(path = {"/{id}"})
-    public void deletePlanet(@PathVariable Long id) {
-        planetService.delete(id);
+    public ResponseEntity deletePlanet(@PathVariable Long id) {
+        return planetService.delete(id);
     }
 }
