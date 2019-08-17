@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PlanetServiceImpl implements PlanetService {
@@ -18,6 +19,13 @@ public class PlanetServiceImpl implements PlanetService {
     @Autowired
     private BaseConnector connector;
 
+    /**
+     * Adicionar planeta na base se for encontrado na API e
+     * complementa seus dados (aparições em filmes).
+     *
+     * @param planet Planet
+     * @return Planet
+     */
     @Override
     public Planet save(Planet planet) {
         PlanetBase planetResult = connector.searchPlanet(planet.getName());
@@ -30,6 +38,7 @@ public class PlanetServiceImpl implements PlanetService {
         }
         // caso não exista
         // retornar msg de erro com motivo
+        // todo: implementar exception
         return null;
     }
 
@@ -44,8 +53,10 @@ public class PlanetServiceImpl implements PlanetService {
     }
 
     @Override
-    public void findById(Long id) {
-
+    public Planet findById(Long id) {
+        Optional<Planet> planets = planetRepository.findById(id);
+        // todo: implementar exception
+        return planets.orElse(null);
     }
 
     @Override

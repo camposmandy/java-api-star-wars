@@ -3,16 +3,14 @@ package br.com.amandacampos.starwarsplanets.resources;
 import br.com.amandacampos.starwarsplanets.models.Planet;
 import br.com.amandacampos.starwarsplanets.services.PlanetService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/planets")
+@RequestMapping("/planets/v1")
 public class PlanetResource {
+    // todo: retornar ResponseEntity nos metodos
 
     @Autowired
     private PlanetService planetService;
@@ -40,7 +38,10 @@ public class PlanetResource {
     /**
      * Search for a planet by id on base.
      */
-    public void findPlanetById() {}
+    @GetMapping(path = "/{id}")
+    public Planet findPlanetById(@PathVariable Long id) {
+        return planetService.findById(id);
+    }
 
 
     /**
