@@ -72,6 +72,12 @@ public class PlanetServiceImpl implements PlanetService {
         return planet.orElseThrow(() -> new PlanetNotFoundException(PlanetExceptionEnum.OBJ_NOT_FOUND.getStatus()));
     }
 
+    @Override
+    public List<Planet> findAll() {
+        List<Planet> planets = planetRepository.findAll();
+        return planets;
+    }
+
     /**
      * Searches for a planet by its identifier and excludes it from database.
      * @param id Long
