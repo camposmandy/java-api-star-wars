@@ -15,6 +15,7 @@ public class PlanetResource {
     @Autowired
     private PlanetService planetService;
 
+
     /**
      * Add a new planet to the base.
      */
@@ -22,6 +23,7 @@ public class PlanetResource {
     public Planet insert(@Valid @RequestBody Planet planet) {
         return planetService.save(planet);
     }
+
 
     /**
      * Lists all planets registered in the base.
@@ -32,13 +34,16 @@ public class PlanetResource {
     /**
      * Search for a planet by name on base.
      */
-    public void findPlanetByName() {}
+    @GetMapping(path = "/searchbyname/{name}")
+    public Planet findPlanetByName(@PathVariable String name) {
+        return planetService.findByName(name);
+    }
 
 
     /**
      * Search for a planet by id on base.
      */
-    @GetMapping(path = "/{id}")
+    @GetMapping(path = "/search/{id}")
     public Planet findPlanetById(@PathVariable Long id) {
         return planetService.findById(id);
     }
@@ -47,6 +52,8 @@ public class PlanetResource {
     /**
      * Excludes a planet from the base.
      */
-    public void deletePlanet() {}
-
+    @DeleteMapping(path = {"/{id}"})
+    public void deletePlanet(@PathVariable Long id) {
+        planetService.delete(id);
+    }
 }

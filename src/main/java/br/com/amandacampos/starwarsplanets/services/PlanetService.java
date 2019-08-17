@@ -5,6 +5,6 @@ import br.com.amandacampos.starwarsplanets.models.Planet;
 public interface PlanetService {
     Planet save(Planet planet);
     Planet findById(Long id);
-    void findByName(Planet planet);
-    void delete(Planet planet);
+    Planet findByName(String name);
+    void delete(Long id);
 }

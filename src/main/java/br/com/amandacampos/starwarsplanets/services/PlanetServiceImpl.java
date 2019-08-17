@@ -42,16 +42,6 @@ public class PlanetServiceImpl implements PlanetService {
         return null;
     }
 
-    /**
-     * Check number of appearances.
-     *
-     * @param films String[]
-     * @return Integer
-     */
-    private Integer countFilms(List<String> films) {
-        return films.size();
-    }
-
     @Override
     public Planet findById(Long id) {
         Optional<Planet> planets = planetRepository.findById(id);
@@ -60,12 +50,27 @@ public class PlanetServiceImpl implements PlanetService {
     }
 
     @Override
-    public void findByName(Planet planet) {
+    public Planet findByName(String name) {
+        List<Planet> planets = planetRepository.findAll();
+        Optional<Planet> planet = planets.stream().filter(p -> name.equals(p.getName())).findFirst();
 
+        // todo: implementar exception
+        return planet.orElse(null);
     }
 
     @Override
-    public void delete(Planet planet) {
+    public void delete(Long id) {
+        // todo: implementar exception
+        planetRepository.deleteById(id);
+    }
 
+    /**
+     * Check number of appearances.
+     *
+     * @param films String[]
+     * @return Integer
+     */
+    private Integer countFilms(List<String> films) {
+        return films.size();
     }
 }
