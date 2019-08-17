@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/planets")
@@ -29,7 +30,10 @@ public class PlanetResource {
     /**
      * Lists all planets registered in the database.
      */
-    public void listPlanets() {}
+    @GetMapping(path = "/list")
+    public List<Planet> listPlanets() {
+        return planetService.findAll();
+    }
 
     /**
      * Search for a planet by name on database.
