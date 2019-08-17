@@ -4,7 +4,11 @@ import br.com.amandacampos.starwarsplanets.connectors.BaseConnector;
 import br.com.amandacampos.starwarsplanets.models.Planet;
 import br.com.amandacampos.starwarsplanets.models.PlanetBase;
 import br.com.amandacampos.starwarsplanets.repositories.PlanetRepository;
+import br.com.amandacampos.starwarsplanets.models.enumarator.PlanetExceptionEnum;
+import br.com.amandacampos.starwarsplanets.services.exception.PlanetNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,48 +24,68 @@ public class PlanetServiceImpl implements PlanetService {
     private BaseConnector connector;
 
     /**
-     * Adicionar planeta na base se for encontrado na API e
-     * complementa seus dados (aparições em filmes).
-     *
+     * Add planet to database, if found in Star Wars API,
+     * and complements your data (movie appearances).
      * @param planet Planet
      * @return Planet
+     * @throws PlanetNotFoundException
      */
     @Override
-    public Planet save(Planet planet) {
+    public ResponseEntity<Planet> save(Planet planet) throws PlanetNotFoundException {
         PlanetBase planetResult = connector.searchPlanet(planet.getName());
 
-        if (planetResult != null) {
-            planet.setMovieAppearances(countFilms(planetResult.getResults().get(0).getFilms()));
-            planetRepository.save(planet);
-            System.out.println(planet);
-            return planet;
+        if (planetResult.getResults().size() == 0) {
+            throw new PlanetNotFoundException(PlanetExceptionEnum.OBJ_NOT_EXIST.getStatus());
         }
-        // caso não exista
-        // retornar msg de erro com motivo
-        // todo: implementar exception
-        return null;
+
+        planet.setMovieAppearances(countFilms(planetResult.getResults().get(0).getFilms()));
+        planetRepository.save(planet);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(planet);
     }
 
+    /**
+     * Searches for a planet by its identifier in the database.
+     * @param id Long
+     * @return Planet
+     * @throws PlanetNotFoundException
+     */
     @Override
-    public Planet findById(Long id) {
-        Optional<Planet> planets = planetRepository.findById(id);
-        // todo: implementar exception
-        return planets.orElse(null);
+    public ResponseEntity<Planet> findById(Long id) throws PlanetNotFoundException {
+        return planetRepository
+                .findById(id)
+                .map(planet -> ResponseEntity.ok().body(planet))
+                .orElseThrow(() -> new PlanetNotFoundException(PlanetExceptionEnum.OBJ_NOT_FOUND.getStatus()));
     }
 
+    /**
+     * Searches for a planet by its name in the database.
+     * @param name String
+     * @return Planet[]
+     * @throws PlanetNotFoundException
+     */
     @Override
-    public Planet findByName(String name) {
+    public Planet findByName(String name) throws PlanetNotFoundException {
         List<Planet> planets = planetRepository.findAll();
         Optional<Planet> planet = planets.stream().filter(p -> name.equals(p.getName())).findFirst();
 
-        // todo: implementar exception
-        return planet.orElse(null);
+        return planet.orElseThrow(() -> new PlanetNotFoundException(PlanetExceptionEnum.OBJ_NOT_FOUND.getStatus()));
     }
 
+    /**
+     * Searches for a planet by its identifier and excludes it from database.
+     * @param id Long
+     * @return ResponseEntity
+     * @throws PlanetNotFoundException
+     */
     @Override
-    public void delete(Long id) {
-        // todo: implementar exception
-        planetRepository.deleteById(id);
+    public ResponseEntity<?> delete(Long id) throws PlanetNotFoundException {
+        return planetRepository.findById(id)
+                .map(planet -> {
+                        planetRepository.delete(planet);
+                        return ResponseEntity.noContent().build();
+                        })
+                .orElseThrow(() -> new PlanetNotFoundException(PlanetExceptionEnum.OBJ_NOT_FOUND.getStatus()));
     }
 
     /**

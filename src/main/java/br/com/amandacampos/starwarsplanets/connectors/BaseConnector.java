@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 @Controller
-@FeignClient(value = "starwarsplanetapi", url = "https://swapi.co/api/")
+@FeignClient(value = "starwarsapi", url = "https://swapi.co/api/")
 public interface BaseConnector {
 
     /**
