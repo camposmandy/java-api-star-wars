@@ -1,13 +1,17 @@
-package br.com.amandacampos.starwarsplanets.domain;
+package br.com.amandacampos.starwarsplanets.models;
 
 import lombok.Data;
+import javax.persistence.*;
 
 @Data
+@Entity
 public class Planet {
     /**
      * Identifier
      */
-    private Integer id;
+    @Id
+    @GeneratedValue(strategy=GenerationType.AUTO)
+    private Long id;
 
     /**
      * Name
@@ -28,4 +32,5 @@ public class Planet {
      * Amount of movie appearances
      */
     private Integer movieAppearances;
+
 }
