@@ -1,9 +1,14 @@
 package br.com.amandacampos.starwarsplanets.resources;
 
-import br.com.amandacampos.starwarsplanets.domain.Planet;
-import br.com.amandacampos.starwarsplanets.service.PlanetService;
+import br.com.amandacampos.starwarsplanets.models.Planet;
+import br.com.amandacampos.starwarsplanets.services.PlanetService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/planets")
@@ -16,10 +21,9 @@ public class PlanetResource {
      * Add a new planet to the base.
      */
     @PostMapping(path = "/add")
-    public void addPlanet(@RequestBody Planet planet) {
-        planetService.savePlanet(planet);
+    public Planet insert(@Valid @RequestBody Planet planet) {
+        return planetService.save(planet);
     }
-
 
     /**
      * Lists all planets registered in the base.
