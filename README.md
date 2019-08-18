@@ -35,7 +35,23 @@ Author: Amanda Guimarães Campos
    |Listar todas tabelas| \dt                   |
    |Listar uma tabela   | SELECT * FROM dt_name;|
    
+ ## SQLectron
+ baixar no site oficial (https://sqlectron.github.io/) e configurar o banco com as seguintes informações possibilitará você de visualizar o banco
+ de uma forma mais visual.
+  
+ ```$xslt
+name: pg-starwars
+database type: PostgreSQL
+server address: localhost, port: 5432
+user: postgres
+initial database/keyspace: postgres
+```
 
+## Run Application (opções)
+    1. Abrir o projeto através de uma IDEA e executar a classe principal (StarWarsPlanetsApplication.class)
+    2. Executar o comando `mvn clean package` para gerar um jar e executa-lo pelo comando  
+    `java -jar star-wars-planets-0.0.1-SNAPSHOT.jar`
+    
 ## Endpoints
 
 A API desenvolvida é composta por 5 métodos, são eles: 
