@@ -7,8 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import javax.servlet.http.HttpServletRequest;
-
 @ControllerAdvice
 public class PlanetExceptionHandler {
 
@@ -18,9 +16,9 @@ public class PlanetExceptionHandler {
      * @param request HttpServletRequest
      * @return Error (custom)
      */
-    @ExceptionHandler(PlanetNotFoundException.class)
-    public ResponseEntity<Error> objectNotFound(PlanetNotFoundException e, HttpServletRequest request) {
-        Error error = new Error(HttpStatus.NOT_FOUND.value(), e.getMessage(), request.getRequestURL().toString(), System.currentTimeMillis());
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
-    }
+//    @ExceptionHandler(PlanetNotFoundException.class)
+//    public ResponseEntity<Error> objectNotFound(PlanetNotFoundException e, HttpServletRequest request) {
+//        Error error = new Error(HttpStatus.NOT_FOUND.value(), e.getMessage(), request.getRequestURL().toString(), System.currentTimeMillis());
+//        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+//    }
 }
