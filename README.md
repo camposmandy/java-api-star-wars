@@ -25,6 +25,9 @@ Author: Amanda Guimarães Campos
   
   `docker run --rm   --name pg-starwars -d -p 5432:5432 postgres`
 
+  (para verificar os containers que já estão inicializados: `docker ps -a`
+   para parar um container `docker stop my_container`)
+
 
    #### Informações Adicionais
    Para iniciar os comandos psql no terminal execute o comando `docker exec -tiu postgres pg-starwars psql` após 
