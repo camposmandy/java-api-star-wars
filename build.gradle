@@ -35,15 +35,17 @@ repositories {
 }
 
 dependencies {
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version:'2.1.6.RELEASE'
+//    compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version:'2.1.6.RELEASE'
+    implementation 'org.springframework.boot:spring-boot-starter-webflux:2.1.6.RELEASE'
     compile group: 'org.projectlombok', name: 'lombok', version:'1.18.0'
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version:'2.1.6.RELEASE'
+//    compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version:'2.1.6.RELEASE'
     compile group: 'org.postgresql', name: 'postgresql', version:'42.2.5'
     compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version:'2.1.2.RELEASE'
     compile group: 'io.github.openfeign', name: 'feign-okhttp', version:'10.2.3'
     compile group: 'io.springfox', name: 'springfox-swagger2', version:'2.9.2'
     compile group: 'io.springfox', name: 'springfox-swagger-ui', version:'2.9.2'
     compile group: 'org.hibernate', name: 'hibernate-gradle-plugin', version: '5.4.3.Final'
+    compile 'org.projectreactor:reactor-spring:1.0.1.RELEASE'
     compileOnly 'org.projectlombok:lombok:1.18.10'
     annotationProcessor 'org.projectlombok:lombok:1.18.4'
     testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version:'2.1.6.RELEASE'
