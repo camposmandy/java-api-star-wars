@@ -8,6 +8,7 @@ import br.com.amandacampos.starwarsplanets.repositories.PlanetRepository;
 import br.com.amandacampos.starwarsplanets.services.exception.PlanetNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -81,22 +82,26 @@ public class PlanetServiceImpl implements PlanetService {
         return planetRepository.findAll();
     }
 
-//    /**
-//     * Searches for a planet by its identifier and excludes it from database.
-//     * @param id Long
-//     * @return ResponseEntity
-//     * @throws PlanetNotFoundException
-//     */
-//    @Override
-//    public ResponseEntity<?> delete(Long id) throws PlanetNotFoundException {
-////        return planetRepository.findById(id)
-////                .map(planet -> {
-////                        planetRepository.delete(planet);
-////                        return ResponseEntity.noContent().build();
-////                        })
-////                .orElseThrow(() -> new PlanetNotFoundException(PlanetExceptionEnum.OBJ_NOT_FOUND.getStatus()));
+    /**
+     * Searches for a planet by its identifier and excludes it from database.
+     * @param id Long
+     * @return ResponseEntity
+     * @throws PlanetNotFoundException
+     */
+    @Override
+    public Mono<?> delete(Long id) throws PlanetNotFoundException {
+        return this.findById(id)
+                .flatMap(planet -> planetRepository
+                            .delete(planet)
+                            .flatMap(plane -> Mono.just(ServerResponse.noContent().build())));
+//        return planetRepository.findById(id)
+//                .map(planet -> {
+//                        planetRepository.delete(planet);
+//                        return ServerResponse.noContent().build();
+//                        })
+//                .orElseThrow(() -> new PlanetNotFoundException(PlanetExceptionEnum.OBJ_NOT_FOUND.getStatus()));
 //        return null;
-//    }
+    }
 
     /**
      * Check number of appearances.

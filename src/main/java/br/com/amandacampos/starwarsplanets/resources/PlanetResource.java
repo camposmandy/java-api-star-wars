@@ -63,8 +63,8 @@ public class PlanetResource {
      * @param id Long
      * @return ResponseEntity
      */
-//    @DeleteMapping(path = {"/{id}"})
-//    public ResponseEntity deletePlanet(@PathVariable Long id) {
-//        return planetService.delete(id);
-//    }
+    @DeleteMapping(path = {"/{id}"})
+    public Mono deletePlanet(@PathVariable Long id) {
+        return planetService.delete(id);
+    }
 }
