@@ -2,19 +2,23 @@ package br.com.amandacampos.starwarsplanets.services;
 
 import br.com.amandacampos.starwarsplanets.connectors.ReactiveServerConnector;
 import br.com.amandacampos.starwarsplanets.models.Planet;
+import br.com.amandacampos.starwarsplanets.models.PlanetBase;
+import br.com.amandacampos.starwarsplanets.models.enumarator.PlanetExceptionEnum;
+import br.com.amandacampos.starwarsplanets.repositories.PlanetRepository;
 import br.com.amandacampos.starwarsplanets.services.exception.PlanetNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class PlanetServiceImpl implements PlanetService {
     private static final String URL_API_STAR_WARS = "https://swapi.co/api/";
 
-//    @Autowired
-//    private PlanetRepository planetRepository;
+    @Autowired
+    private PlanetRepository planetRepository;
 
     private ReactiveServerConnector reactiveServerConnector;
 
@@ -32,23 +36,17 @@ public class PlanetServiceImpl implements PlanetService {
      */
     @Override
     public Mono<Planet> save(Planet planet) throws PlanetNotFoundException {
-//        PlanetBase planetResult = connector.searchPlanet(planet.getName());
         String url = URL_API_STAR_WARS + "planets/?search=" + planet.getName();
-        System.out.println("save mono");
-        return reactiveServerConnector.doPost(url, planet)
+        return reactiveServerConnector.doGet(url)
                 .flatMap(clientResponse -> {
-                    System.out.printf("\n Client Response", clientResponse);
-
-                    Mono<Planet> planetResult = clientResponse.bodyToMono(Planet.class);
+                    Mono<PlanetBase> planetResult = clientResponse.bodyToMono(PlanetBase.class);
                     return planetResult.flatMap(response -> {
-                        System.out.printf("\n PLANET RESULT", planetResult);
-                        return Mono.just(response);
-//                        if (response.getResults().size() == 0) {
-//                            throw new PlanetNotFoundException(PlanetExceptionEnum.OBJ_NOT_EXIST.getStatus());
-//                        }
-//
-//                        planet.setMovieAppearances(countFilms(response.getResults().get(0).getFilms()));
-//                        return planetRepository.save(planet);
+                        if (response.getResults().size() == 0) {
+                            throw new PlanetNotFoundException(PlanetExceptionEnum.OBJ_NOT_EXIST.getStatus());
+                        }
+                        planet.setMovieAppearances(countFilms(response.getResults().get(0).getFilms()));
+                        planet.setId(UUID.randomUUID().toString());
+                        return planetRepository.save(planet);
                     });
                 });
     }
