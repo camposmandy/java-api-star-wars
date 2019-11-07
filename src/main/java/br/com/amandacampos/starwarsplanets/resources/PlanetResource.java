@@ -53,10 +53,10 @@ public class PlanetResource {
      * @param id Long
      * @return Planet
      */
-//    @GetMapping(path = "/{id}")
-//    public ResponseEntity<Planet> findPlanetById(@PathVariable Long id) {
-//        return planetService.findById(id);
-//    }
+    @GetMapping(path = {"/{id}"})
+    public Mono<Planet> findPlanetById(@PathVariable Long id) {
+        return planetService.findById(id);
+    }
 
     /**
      * Excludes a planet from the database.

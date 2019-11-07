@@ -9,7 +9,7 @@ public class Planet {
      * Identifier
      */
     @Id
-    private String id;
+    private Long id;
 
     /**
      * Name

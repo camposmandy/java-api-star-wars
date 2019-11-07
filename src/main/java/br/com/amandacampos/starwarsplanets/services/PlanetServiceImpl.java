@@ -11,8 +11,8 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.sql.Timestamp;
 import java.util.List;
-import java.util.UUID;
 
 @Service
 public class PlanetServiceImpl implements PlanetService {
@@ -33,7 +33,7 @@ public class PlanetServiceImpl implements PlanetService {
      * and complements your data (movie appearances).
      * @param planet Planet
      * @return Planet
-     * @throws PlanetNotFoundException
+     * @throws PlanetNotFoundException Planet name invalid
      */
     @Override
     public Mono<Planet> save(Planet planet) throws PlanetNotFoundException {
@@ -46,32 +46,29 @@ public class PlanetServiceImpl implements PlanetService {
                             throw new PlanetNotFoundException(PlanetExceptionEnum.OBJ_NOT_EXIST.getStatus());
                         }
                         planet.setMovieAppearances(countFilms(response.getResults().get(0).getFilms()));
-                        planet.setId(UUID.randomUUID().toString());
+                        planet.setId(this.getCurrentId());
                         return planetRepository.save(planet);
                     });
                 });
     }
 
-//    /**
-//     * Searches for a planet by its identifier in the database.
-//     * @param id Long
-//     * @return Planet
-//     * @throws PlanetNotFoundException
-//     */
-//    @Override
-//    public ResponseEntity<Planet> findById(Long id) throws PlanetNotFoundException {
-////        return planetRepository
-////                .findById(id)
-////                .map(planet -> ResponseEntity.ok().body(planet))
-////                .orElseThrow(() -> new PlanetNotFoundException(PlanetExceptionEnum.OBJ_NOT_FOUND.getStatus()));
-//        return null;
-//    }
+    /**
+     * Searches for a planet by its identifier in the database.
+     * @param id Long
+     * @return Planet
+     * @throws PlanetNotFoundException Planet not found
+     */
+    @Override
+    public Mono<Planet> findById(Long id) throws PlanetNotFoundException {
+        return planetRepository
+                .findById(id)
+                .switchIfEmpty(Mono.error(new PlanetNotFoundException(PlanetExceptionEnum.OBJ_NOT_FOUND.getStatus())));
+    }
 
     /**
      * Searches for a planet by its name in the database.
      * @param name String
      * @return Planet[]
-     * @throws PlanetNotFoundException
      */
     @Override
     public Mono<List<Planet>> findByName(String name) throws PlanetNotFoundException {
@@ -109,5 +106,15 @@ public class PlanetServiceImpl implements PlanetService {
      */
     private Integer countFilms(List<String> films) {
         return films.size();
+    }
+
+
+    /**
+     * Generate random id
+     * @return Long
+     */
+    private Long getCurrentId(){
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        return timestamp.getTime();
     }
 }
