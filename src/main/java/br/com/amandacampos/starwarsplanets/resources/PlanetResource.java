@@ -3,12 +3,14 @@ package br.com.amandacampos.starwarsplanets.resources;
 import br.com.amandacampos.starwarsplanets.models.Planet;
 import br.com.amandacampos.starwarsplanets.services.PlanetService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/planets")
@@ -41,10 +43,10 @@ public class PlanetResource {
      * @param name String
      * @return Planet
      */
-//    @GetMapping()
-//    public Planet findPlanetByName(@Param("name") String name) {
-//        return planetService.findByName(name);
-//    }
+    @GetMapping()
+    public Mono<List<Planet>> findPlanetByName(@Param("name") String name) {
+        return planetService.findByName(name);
+    }
 
     /**
      * Search for a planet by id on database.

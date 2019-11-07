@@ -10,7 +10,7 @@ import java.util.List;
 public interface PlanetService {
     Mono<Planet> save(Planet planet);
 //    ResponseEntity<Planet> findById(Long id);
-//    Planet findByName(String name);
+    Mono<List<Planet>> findByName(String name);
     Flux<Planet> findAll();
 //    ResponseEntity<?> delete(Long id);
 }
