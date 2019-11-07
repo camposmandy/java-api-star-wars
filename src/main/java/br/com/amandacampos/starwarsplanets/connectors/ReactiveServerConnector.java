@@ -24,4 +24,11 @@ public class ReactiveServerConnector {
                 .body(BodyInserters.fromObject(request))
                 .exchange();
     }
+
+    public Mono<ClientResponse> doGet(String url) {
+        return  client.get()
+                .uri(url)
+                .accept(MediaType.APPLICATION_JSON_UTF8)
+                .exchange();
+    }
 }

@@ -1,17 +1,15 @@
 package br.com.amandacampos.starwarsplanets.models;
 
 import lombok.Data;
-import javax.persistence.*;
+import org.springframework.data.annotation.Id;
 
 @Data
-@Entity
 public class Planet {
     /**
      * Identifier
      */
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
-    private Long id;
+    private String id;
 
     /**
      * Name
