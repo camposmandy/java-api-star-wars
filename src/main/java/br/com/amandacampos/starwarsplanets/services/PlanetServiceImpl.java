@@ -94,13 +94,6 @@ public class PlanetServiceImpl implements PlanetService {
                 .flatMap(planet -> planetRepository
                             .delete(planet)
                             .flatMap(plane -> Mono.just(ServerResponse.noContent().build())));
-//        return planetRepository.findById(id)
-//                .map(planet -> {
-//                        planetRepository.delete(planet);
-//                        return ServerResponse.noContent().build();
-//                        })
-//                .orElseThrow(() -> new PlanetNotFoundException(PlanetExceptionEnum.OBJ_NOT_FOUND.getStatus()));
-//        return null;
     }
 
     /**
