@@ -66,21 +66,18 @@ public class PlanetServiceImpl implements PlanetService {
 ////                .orElseThrow(() -> new PlanetNotFoundException(PlanetExceptionEnum.OBJ_NOT_FOUND.getStatus()));
 //        return null;
 //    }
-//
-//    /**
-//     * Searches for a planet by its name in the database.
-//     * @param name String
-//     * @return Planet[]
-//     * @throws PlanetNotFoundException
-//     */
-//    @Override
-//    public Planet findByName(String name) throws PlanetNotFoundException {
-////        List<Planet> planets = planetRepository.findAll();
-////        Optional<Planet> planet = planets.stream().filter(p -> name.equals(p.getName())).findFirst();
-////
-////        return planet.orElseThrow(() -> new PlanetNotFoundException(PlanetExceptionEnum.OBJ_NOT_FOUND.getStatus()));
-//        return null;
-//    }
+
+    /**
+     * Searches for a planet by its name in the database.
+     * @param name String
+     * @return Planet[]
+     * @throws PlanetNotFoundException
+     */
+    @Override
+    public Mono<List<Planet>> findByName(String name) throws PlanetNotFoundException {
+        Flux<Planet> planets = this.findAll();
+        return planets.filter(p -> name.equals(p.getName())).collectList();
+    }
 
     @Override
     public Flux<Planet> findAll() {
