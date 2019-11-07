@@ -8,6 +8,7 @@ import br.com.amandacampos.starwarsplanets.repositories.PlanetRepository;
 import br.com.amandacampos.starwarsplanets.services.exception.PlanetNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
@@ -80,14 +81,12 @@ public class PlanetServiceImpl implements PlanetService {
 ////        return planet.orElseThrow(() -> new PlanetNotFoundException(PlanetExceptionEnum.OBJ_NOT_FOUND.getStatus()));
 //        return null;
 //    }
-//
-//    @Override
-//    public List<Planet> findAll() {
-////        List<Planet> planets = planetRepository.findAll();
-////        return planets;
-//        return null;
-//    }
-//
+
+    @Override
+    public Flux<Planet> findAll() {
+        return planetRepository.findAll();
+    }
+
 //    /**
 //     * Searches for a planet by its identifier and excludes it from database.
 //     * @param id Long
