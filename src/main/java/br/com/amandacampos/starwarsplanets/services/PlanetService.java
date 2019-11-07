@@ -11,5 +11,5 @@ public interface PlanetService {
     Mono<Planet> findById(Long id);
     Mono<List<Planet>> findByName(String name);
     Flux<Planet> findAll();
-//    ResponseEntity<?> delete(Long id);
+    Mono<?> delete(Long id);
 }
