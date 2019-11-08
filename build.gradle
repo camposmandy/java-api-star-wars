@@ -41,7 +41,12 @@ dependencies {
     compile group: 'io.springfox', name: 'springfox-swagger2', version:'2.9.2'
     compile group: 'io.springfox', name: 'springfox-swagger-ui', version:'2.9.2'
     compile 'org.projectreactor:reactor-spring:1.0.1.RELEASE'
+
     compileOnly 'org.projectlombok:lombok:1.18.10'
     annotationProcessor 'org.projectlombok:lombok:1.18.4'
-    testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version:'2.1.6.RELEASE'
+
+    testCompile('org.springframework.boot:spring-boot-starter-test')
+    testCompile('io.projectreactor:reactor-test')
+    testCompile('org.junit.jupiter:junit-jupiter-api:5.3.2')
+    testCompile('org.junit.jupiter:junit-jupiter-engine:5.3.2')
 }
