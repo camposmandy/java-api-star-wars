@@ -10,34 +10,33 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.BodyInserters;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import static org.mockito.Mockito.times;
 
-@SpringBootTest()
 @RunWith(SpringRunner.class)
+@WebFluxTest(PlanetResource.class)
 public class PlanetResourceTest {
 
     @Mock
     PlanetRepository repository;
 
-    @Mock
+    @MockBean
     PlanetService planetService;
 
-    @InjectMocks
+    @Mock
     PlanetResource planetResource;
 
+    @Autowired
     private WebTestClient webClient;
-
-    @Before()
-    public void setup() {
-        webClient = WebTestClient.bindToServer().baseUrl("http://localhost:8080").build();
-    }
 
     @Test
     public void testInsert() {
@@ -64,17 +63,32 @@ public class PlanetResourceTest {
         Mockito.verify(planetService, times(1)).save(planet);
     }
 
-//    void testListPlanets() {
-//    }
-//
-//    void testFindPlanetByName() {
-//    }
-//
-//    void testFindPlanetById() {
-//    }
-//
-//    void testDeletePlanet() {
-//    }
+    @Test
+    public void testListPlanets() {
+        Mockito
+                .when(repository.findAll())
+                .thenReturn(Flux.just(new Planet()));
+
+        webClient.get()
+                .uri("/planets/list")
+                .exchange();
+
+        planetResource.listPlanets();
+
+        Mockito.verify(planetService, times(1)).findAll();
+    }
+
+    @Test
+    public void testFindPlanetByName() {
+    }
+
+    @Test
+    public void testFindPlanetById() {
+    }
+
+    @Test
+    public void testDeletePlanet() {
+    }
 
     private Long getRandomLong() {
         long leftLimit = 1L;
