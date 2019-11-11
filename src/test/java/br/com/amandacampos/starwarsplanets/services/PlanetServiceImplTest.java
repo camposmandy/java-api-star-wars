@@ -93,6 +93,35 @@ public class PlanetServiceImplTest {
         Mono<Planet> response = planetService.findById(Long.parseLong("3"));
     }
 
+    @Test
+    @DisplayName("Test: Delete Planet by id. <Expected> Delete a Planet.")
+    public void delete() {
+        Planet planet = getMockPlanet();
+
+        Mockito.when(repository.findById(planet.getId()))
+                .thenReturn(Mono.just(planet));
+
+        Mockito.when(repository.delete(planet))
+                .thenReturn(Mono.empty());
+
+       Mono<?> response = planetService.delete(planet.getId());
+    }
+
+    @Test(expected = NullPointerException.class)
+    @DisplayName("Test: Delete Planet by id. <Expected> Not found a Planet.")
+    public void deleteNotFound() {
+        Planet planet = getMockPlanet();
+        planet.setId(Long.parseLong("1"));
+
+        Mockito.when(repository.findById(Long.parseLong("5")))
+                .thenReturn(Mono.just(planet));
+
+        Mockito.when(repository.delete(planet))
+                .thenReturn(Mono.empty());
+
+        Mono<?> response = planetService.delete(planet.getId());
+    }
+
     private Planet getMockPlanet() {
         Planet planet = new Planet();
 
