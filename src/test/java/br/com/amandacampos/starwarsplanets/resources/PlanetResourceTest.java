@@ -58,7 +58,8 @@ public class PlanetResourceTest {
 
         webClient.get()
                 .uri("/planets/list")
-                .exchange();
+                .exchange()
+                .expectStatus().isOk();
 
         Mockito.verify(planetService, times(1)).findAll();
     }
@@ -72,14 +73,25 @@ public class PlanetResourceTest {
 
         webClient.get()
                 .uri("/planets?name=" + planet.getName())
-                .exchange();
+                .exchange()
+                .expectStatus().isOk();
 
         Mockito.verify(planetService, times(1)).findByName("Alderaan");
     }
 
     @Test
     public void testFindPlanetById() {
+        Planet planet = getMockPlanet();
 
+        Mockito.when(repository.findById(planet.getId()))
+                .thenReturn(Mono.just(planet));
+
+        webClient.get()
+                .uri("/planets/" + planet.getId())
+                .exchange()
+                .expectStatus().isOk();
+
+        Mockito.verify(planetService, times(1)).findById(planet.getId());
     }
 
     @Test
