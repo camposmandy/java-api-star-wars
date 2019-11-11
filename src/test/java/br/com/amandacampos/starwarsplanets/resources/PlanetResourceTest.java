@@ -96,6 +96,17 @@ public class PlanetResourceTest {
 
     @Test
     public void testDeletePlanet() {
+        Planet planet = getMockPlanet();
+
+        Mockito.when(repository.findById(planet.getId()))
+                .thenReturn(Mono.empty());
+
+        webClient.delete()
+                .uri("/planets/" + planet.getId())
+                .exchange()
+                .expectStatus().isOk();
+
+        Mockito.verify(planetService, times(1)).delete(planet.getId());
     }
 
 
