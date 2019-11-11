@@ -65,6 +65,34 @@ public class PlanetServiceImplTest {
         });
     }
 
+    @Test
+    @DisplayName("Test: Find Planet by id. <Expected> Return a Planet.")
+    public void findById() {
+        Planet planet = getMockPlanet();
+
+        Mockito.when(repository.findById(planet.getId()))
+                .thenReturn(Mono.just(planet));
+
+        Mono<Planet> response = planetService.findById(planet.getId());
+
+        response.subscribe(resp -> {
+            Assertions.assertEquals(Planet.class, resp.getClass());
+            Assertions.assertEquals(resp.getId(), planet.getId());
+        });
+    }
+
+    @Test(expected = NullPointerException.class)
+    @DisplayName("Test: Find Planet by id. <Expected> Not found a Planet.")
+    public void findByIdNotFound() {
+        Planet planet = getMockPlanet();
+        planet.setId(Long.parseLong("1"));
+
+        Mockito.when(repository.findById(planet.getId()))
+                .thenReturn(Mono.just(planet));
+
+        Mono<Planet> response = planetService.findById(Long.parseLong("3"));
+    }
+
     private Planet getMockPlanet() {
         Planet planet = new Planet();
 
