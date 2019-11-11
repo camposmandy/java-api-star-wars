@@ -1,6 +1,8 @@
 package br.com.amandacampos.starwarsplanets.services;
 
 import br.com.amandacampos.starwarsplanets.models.Planet;
+import br.com.amandacampos.starwarsplanets.models.PlanetBase;
+import br.com.amandacampos.starwarsplanets.models.PlanetResult;
 import br.com.amandacampos.starwarsplanets.repositories.PlanetRepository;
 import br.com.amandacampos.starwarsplanets.util.Util;
 import org.junit.Before;
@@ -9,24 +11,26 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @RunWith(SpringRunner.class)
 public class PlanetServiceImplTest {
 
-    @Mock
+    @MockBean
     PlanetRepository repository;
 
     @InjectMocks
     PlanetServiceImpl planetService;
+
 
     @Before
     public void setUp() {
@@ -104,7 +108,7 @@ public class PlanetServiceImplTest {
         Mockito.when(repository.delete(planet))
                 .thenReturn(Mono.empty());
 
-       Mono<?> response = planetService.delete(planet.getId());
+        Mono<?> response = planetService.delete(planet.getId());
     }
 
     @Test(expected = NullPointerException.class)
@@ -120,6 +124,37 @@ public class PlanetServiceImplTest {
                 .thenReturn(Mono.empty());
 
         Mono<?> response = planetService.delete(planet.getId());
+    }
+
+    @Test
+    public void savePlanet() {
+        Planet planet = getMockPlanet();
+        PlanetBase apiResponse = new PlanetBase();
+
+        PlanetResult planetResult = new PlanetResult();
+        planetResult.setFilms(Arrays.asList("https://swapi.co/api/films/6/", "https://swapi.co/api/films/1/"));
+
+        List<PlanetResult> planetResults = new ArrayList<>();
+        planetResults.add(planetResult);
+
+        apiResponse.setResults(planetResults);
+
+//        planetService = new PlanetServiceImpl(connector);
+
+//        FluxExchangeResult<PlanetBase> result = webClient.get()
+//            .uri("https://swapi.co/api/planets/?search=" + planet.getName())
+//            .accept(MediaType.APPLICATION_JSON_UTF8)
+//            .exchange()
+//            .returnResult(PlanetBase.class);
+
+//       Mockito.when(connector.doGet("https://swapi.co/api/planets/?search=" + planet.getName()))
+//                .thenReturn(result);
+
+//        Mono<Planet> response = planetService.save(planet);
+
+        //        response.subscribe(resp -> {
+//            Assertions.assertEquals(planet.getMovieAppearances(), resp.getMovieAppearances());
+//        });
     }
 
     private Planet getMockPlanet() {
