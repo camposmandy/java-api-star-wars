@@ -1,6 +1,7 @@
 package br.com.amandacampos.starwarsplanets.resources;
 
 
+import br.com.amandacampos.starwarsplanets.util.Util;
 import br.com.amandacampos.starwarsplanets.models.Planet;
 import br.com.amandacampos.starwarsplanets.repositories.PlanetRepository;
 import br.com.amandacampos.starwarsplanets.services.PlanetService;
@@ -109,20 +110,13 @@ public class PlanetResourceTest {
         Mockito.verify(planetService, times(1)).delete(planet.getId());
     }
 
-
-    private Long getRandomLong() {
-        long leftLimit = 1L;
-        long rightLimit = 10L;
-        return leftLimit + (long) (Math.random() * (rightLimit - leftLimit));
-    }
-
     private Planet getMockPlanet() {
         Planet planet = new Planet();
 
         planet.setClimate("temperate");
         planet.setName("Alderaan");
         planet.setTerrain("grasslands, mountains");
-        planet.setId(getRandomLong());
+        planet.setId(Util.getRandomLong());
         planet.setMovieAppearances(12);
 
         return planet;
