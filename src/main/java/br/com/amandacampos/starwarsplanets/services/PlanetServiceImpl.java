@@ -92,8 +92,7 @@ public class PlanetServiceImpl implements PlanetService {
     public Mono<?> delete(Long id) throws PlanetNotFoundException {
         return this.findById(id)
                 .flatMap(planet -> planetRepository
-                            .delete(planet)
-                            .flatMap(plane -> Mono.just(ServerResponse.noContent().build())));
+                            .delete(planet));
     }
 
     /**
